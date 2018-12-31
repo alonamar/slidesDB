@@ -90,17 +90,18 @@ public class DBUnit {
             e.printStackTrace();
         }
         final String dir = System.getProperty("user.dir");
-        String dbConnection = "jdbc:h2:" + dir + "/database/" + DBNAME;
+        String dbConnection = "jdbc:h2:" + dir + "/database/" + DBNAME + ";CIPHER=AES";
         System.out.println(dbConnection);
-        this.con = DriverManager.getConnection(dbConnection,"root","123456");
+        this.con = DriverManager.getConnection(dbConnection,"root","123 123456");
     }
 
     /**
      * Creating a new DB with the provided files under the dbApp.database folder <br>
      * Naming convention: [name]_table, [name]_table_inserts
      * @throws IOException accessing the dbApp.database files
+     * @throws SQLException In case database already exist
      */
-    public void init() throws IOException {
+    public void init() throws IOException, SQLException {
         List<String> mySQLFiles = new ArrayList<String>();
         final String dir = System.getProperty("user.dir");
         Files.list(Paths.get(dir + "/database"))
@@ -114,20 +115,14 @@ public class DBUnit {
     /**
      * Receive SQL file and execute each statement in that file.
      * @param file The sql file to execute
-     * @return true if successful
      * @throws IOException reading the file itself
+     * @throws SQLException In case database already exist
      */
-    public boolean runSQLFile(String file) throws IOException {
+    public void runSQLFile(String file) throws IOException, SQLException {
         Statement mySTMT = null;
-        try {
-            mySTMT = this.con.createStatement();
-            String content = new String(Files.readAllBytes(Paths.get(file)));
-            mySTMT.executeUpdate(content);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        mySTMT = this.con.createStatement();
+        String content = new String(Files.readAllBytes(Paths.get(file)));
+        mySTMT.executeUpdate(content);
     }
 
     // can't look for null values
@@ -241,5 +236,9 @@ public class DBUnit {
 
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+    }
+
+    public static String getTablename(){
+        return TABLENAME;
     }
 }

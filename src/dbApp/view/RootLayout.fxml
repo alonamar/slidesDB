@@ -15,6 +15,7 @@
                   <MenuItem fx:id="newFormBtn" mnemonicParsing="false" onAction="#newForm" text="New Form" />
                   <MenuItem fx:id="backUpBtn" mnemonicParsing="false" text="Back-up Database" />
                   <MenuItem fx:id="printBtn" mnemonicParsing="false" text="Print" />
+                  <MenuItem mnemonicParsing="false" onAction="#initDB" text="Init DB" />
                   <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem fx:id="closeBtn" mnemonicParsing="false" text="Close" />
             </items>

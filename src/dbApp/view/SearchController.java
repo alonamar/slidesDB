@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class SearchController {
 
     private ObservableList<TableEntry> searchQuery = FXCollections.observableArrayList();
     private DBUnit dbUnit = new DBUnit();
-    private final static String TABLENAME = "Patient";
     private TableEntry selectedTE = null;
 
     @FXML
@@ -40,16 +40,28 @@ public class SearchController {
     private TextArea diagnosisText;
 
     @FXML
-    private TextField minSlidesText;
+    private DatePicker startDatePick;
 
     @FXML
-    private TextField minBlocksText;
+    private DatePicker endDatePick;
 
     @FXML
-    private Button searchBtn;
+    private TextField patientNameText;
+
+    @FXML
+    private TextField contactText;
+
+    @FXML
+    private TextField addressText;
+
+    @FXML
+    private TextField materialText;
 
     @FXML
     private TableColumn<TableEntry, String> caseCol;
+
+    @FXML
+    private TableColumn<TableEntry, String> osuCol;
 
     @FXML
     private TableColumn<TableEntry, Double> ageCol;
@@ -64,16 +76,24 @@ public class SearchController {
     private TableColumn<TableEntry, String> diagnosisCol;
 
     @FXML
-    private TableColumn<TableEntry, Integer> slidesCol;
+    private TableColumn<TableEntry, LocalDate> dateaccessionedCol;
 
     @FXML
-    private TableColumn<TableEntry, Integer> blocksCol;
+    private TableColumn<TableEntry, String> patientCol;
+
+    @FXML
+    private TableColumn<TableEntry, String> contactCol;
+
+    @FXML
+    private TableColumn<TableEntry, String> addressCol;
+
+    @FXML
+    private TableColumn<TableEntry, String> materialCol;
 
     @FXML
     private TableView<TableEntry> dbTable;
 
-    @FXML
-    private TableColumn<TableEntry, LocalDate> dateaccessionedCol;
+
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -89,14 +109,34 @@ public class SearchController {
     private void initialize() {
         //define each column in the table
         caseCol.setCellValueFactory(cellData -> cellData.getValue().caseNoProperty());
+        osuCol.setCellValueFactory(cellData -> cellData.getValue().osuProperty());
         ageCol.setCellValueFactory(cellData -> cellData.getValue().ageProperty());
         sexCol.setCellValueFactory(cellData -> cellData.getValue().sexProperty());
         siteCol.setCellValueFactory(cellData -> cellData.getValue().siteProperty());
         diagnosisCol.setCellValueFactory(cellData -> cellData.getValue().diagnosisProperty());
-        slidesCol.setCellValueFactory(cellData -> cellData.getValue().slidesProperty().asObject());
-        blocksCol.setCellValueFactory(cellData -> cellData.getValue().blocksProperty().asObject());
         dateaccessionedCol.setCellValueFactory(cellData -> cellData.getValue().dateaccessionedProperty());
+        patientCol.setCellValueFactory(cellData -> cellData.getValue().patientnameProperty());
+        addressCol.setCellValueFactory(cellData -> cellData.getValue().addressProperty());
+        contactCol.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        materialCol.setCellValueFactory(cellData -> cellData.getValue().materialkeptProperty());
 
+        // Custom rendering of the table cell.
+        DateTimeFormatter myDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        dateaccessionedCol.setCellFactory(column -> {
+            return new TableCell<TableEntry, LocalDate>() {
+                @Override
+                protected void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        // Format date.
+                        setText(myDateFormatter.format(item));
+                    }
+                }
+            };
+        });
         // define the limitation of each text field
         minAgeText.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -114,24 +154,8 @@ public class SearchController {
                 }
             }
         });
-        minSlidesText.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}?")) {
-                    minSlidesText.setText(oldValue);
-                }
-            }
-        });
-        minBlocksText.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}?")) {
-                    minBlocksText.setText(oldValue);
-                }
-            }
-        });
-        sexSelect.setItems(FXCollections.observableArrayList("", "F", "M"));
-        sexSelect.setValue("");
+        sexSelect.setItems(FXCollections.observableArrayList("All", "F", "M"));
+        sexSelect.setValue("All");
         sexSelect.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -161,7 +185,7 @@ public class SearchController {
     }
 
     @FXML
-    private void searchQuery(ActionEvent event) { //todo: add other searchBtn criteria
+    private void handleSearch(ActionEvent event) {
         try {
             dbUnit.connect();
             List<DBCol> myList = new ArrayList<>();
@@ -174,32 +198,61 @@ public class SearchController {
                 Double minVal = minAgeText.getText().isEmpty() ? 0.0 : Double.parseDouble(minAgeText.getText());
                 myList.add(new DBCol<Double>(maxVal, "age", minVal));
             }
-            if(sexSelect.getValue() != "")
+            if(sexSelect.getValue() != "All")
                 myList.add(new DBCol<String>(sexSelect.getValue(), "sex"));
             if(!siteText.getText().isEmpty())
                 myList.add(new DBCol<String>(siteText.getText(), "site"));
             if(!diagnosisText.getText().isEmpty())
                 myList.add(new DBCol<String>(diagnosisText.getText(), "diagnosis"));
-            if(!minBlocksText.getText().isEmpty())
-                myList.add(new DBCol<Integer>(1000, "blocks",
-                        Integer.parseInt(minBlocksText.getText())));
-            if(!minSlidesText.getText().isEmpty())
-                myList.add(new DBCol<Integer>(1000, "slides",
-                        Integer.parseInt(minSlidesText.getText())));
-            ResultSet mySet = dbUnit.select(myList, TABLENAME);
+            if(startDatePick.getValue() != null || endDatePick.getValue() != null) {
+                LocalDate endVal = endDatePick.getValue() == null ?
+                        LocalDate.now() : endDatePick.getValue();
+                LocalDate startVal = startDatePick.getValue() == null ?
+                        LocalDate.MIN  : startDatePick.getValue();
+                myList.add(new DBCol<LocalDate>(endVal, "dateaccessioned", startVal));
+            }
+            if(!patientNameText.getText().isEmpty())
+                myList.add(new DBCol<String>(patientNameText.getText(), "patientname"));
+            if(!contactText.getText().isEmpty())
+                myList.add(new DBCol<String>(contactText.getText(), "contact"));
+            if(!addressText.getText().isEmpty())
+                myList.add(new DBCol<String>(addressText.getText(), "address"));
+            if(!materialText.getText().isEmpty())
+                myList.add(new DBCol<String>(materialText.getText(), "materialkept"));
+            ResultSet mySet = dbUnit.select(myList, DBUnit.getTablename());
             while(mySet.next()){
                 Double ageVal = mySet.getDouble("age");
                 ageVal = mySet.wasNull() ? null : ageVal; // since resultset turn null values into 0
                 searchQuery.add(
-                        new TableEntry(mySet.getString("caseNo"),
+                        new TableEntry(mySet.getBoolean("old_form"),
+                                mySet.getInt("id"),
+                                mySet.getString("osu"),
+                                mySet.getString("caseNo"),
                                 mySet.getString("sex"),
                                 ageVal,
                                 mySet.getString("site"),
                                 mySet.getString("diagnosis"),
-                                mySet.getInt("slides"),
-                                mySet.getInt("blocks"),
+                                mySet.getString("diseaseprocess"),
+                                mySet.getString("otherbiopsies"),
+                                mySet.getString("specialfeatures"),
+                                mySet.getString("paxit"),
+                                mySet.getBoolean("photography"),
+                                mySet.getBoolean("seminarcase"),
+                                mySet.getBoolean("reportable_newentity"),
+                                mySet.getBoolean("uncertaindiagnosis"),
+                                mySet.getString("clinicalinformation"),
+                                mySet.getString("followup"),
+                                mySet.getString("address"),
+                                mySet.getString("patientname"),
+                                mySet.getString("contactphone"),
+                                mySet.getString("contactfax"),
                                 mySet.getDate("dateaccessioned") == null ? null :
-                                        mySet.getDate("dateaccessioned").toLocalDate()
+                                        mySet.getDate("dateaccessioned").toLocalDate(),
+                                mySet.getString("email"),
+                                mySet.getString("materialreceived"),
+                                mySet.getString("materialkept"),
+                                mySet.getBoolean("charge"),
+                                mySet.getString("contact")
                         ));
             }
             dbTable.setItems(searchQuery);
@@ -209,6 +262,31 @@ public class SearchController {
             e.printStackTrace(); // todo: add alert that the connection failed.
         }
 
+    }
+
+    @FXML
+    private void handleNewForm(ActionEvent event) {
+        Main.showForm(null);
+    }
+
+    @FXML
+    private void handleEdit(ActionEvent event) {
+        Main.showForm(this.selectedTE);
+    }
+
+    @FXML
+    private void handleDelete(ActionEvent event) { // todo: add alert
+        if(selectedTE == null)
+            return;
+        List<DBCol> myList = new ArrayList<>();
+        myList.add(new DBCol<Integer>(selectedTE.getId(), "id"));
+        try {
+            dbUnit.connect();
+            dbUnit.delete(myList, DBUnit.getTablename());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        dbTable.getItems().remove(selectedTE);
     }
 
     /**

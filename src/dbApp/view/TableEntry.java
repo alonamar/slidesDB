@@ -6,23 +6,16 @@ import javafx.beans.property.*;
 import javafx.scene.control.CheckBox;
 
 public class TableEntry {
-    private CheckBox old_form;
+    private BooleanProperty old_form;
     private IntegerProperty id;
     private StringProperty osu;
     private StringProperty caseNo;
     private StringProperty sex;
     private SimpleObjectProperty<Double> age;
     private StringProperty site;
-    private StringProperty organsystem; // ?
     private StringProperty diagnosis;
     private StringProperty diseaseprocess; // clinical information
     private StringProperty otherbiopsies;
-    private IntegerProperty slides;
-    private StringProperty ihc; // ?
-    private IntegerProperty unstainedsections; // ?
-    private BooleanProperty em; // ?
-    private BooleanProperty wt; // ?
-    private IntegerProperty blocks;
     private StringProperty specialfeatures;
     private StringProperty paxit;
     private BooleanProperty photography;
@@ -31,10 +24,8 @@ public class TableEntry {
     private BooleanProperty uncertaindiagnosis;
     private StringProperty clinicalinformation;
     private StringProperty followup;
-    private StringProperty references; // ?
     private StringProperty address;
     private StringProperty patientname;
-    private StringProperty specialstains; // ?
     private StringProperty contactphone;
     private StringProperty contactfax;
     private ObjectProperty<LocalDate> dateaccessioned;
@@ -48,15 +39,15 @@ public class TableEntry {
 
     }
 
-    public TableEntry(CheckBox old_form, Integer id, String osu, String caseNo, String sex,
+    public TableEntry(Boolean old_form, Integer id, String osu, String caseNo, String sex,
                       Double age, String site, String diagnosis, String diseaseprocess,
-                      String otherbiopsies, Integer slides, Integer blocks, String specialfeatures, String paxit, Boolean photography,
+                      String otherbiopsies, String specialfeatures, String paxit, Boolean photography,
                       Boolean seminarcase, Boolean reportable_newentity, Boolean uncertaindiagnosis,
                       String clinicalinformation, String followup, String address,
                       String patientname, String contactphone, String contactfax,
                       LocalDate dateaccessioned, String email, String materialreceived, String materialkept,
                       Boolean charge, String contact) {
-        this.old_form = old_form;
+        this.old_form = new SimpleBooleanProperty(old_form);
         this.id = new SimpleIntegerProperty(id);
         this.osu = new SimpleStringProperty(osu);
         this.caseNo = new SimpleStringProperty(caseNo);
@@ -66,8 +57,6 @@ public class TableEntry {
         this.diagnosis = new SimpleStringProperty(diagnosis);
         this.diseaseprocess = new SimpleStringProperty(diseaseprocess);
         this.otherbiopsies = new SimpleStringProperty(otherbiopsies);
-        this.slides = new SimpleIntegerProperty(slides);
-        this.blocks = new SimpleIntegerProperty(blocks);
         this.specialfeatures = new SimpleStringProperty(specialfeatures);
         this.paxit = new SimpleStringProperty(paxit);
         this.photography = new SimpleBooleanProperty(photography);
@@ -89,19 +78,17 @@ public class TableEntry {
     }
 
     public TableEntry(String caseNo, String sex, Double age, String site, String diagnosis,
-                      Integer slides, Integer blocks, LocalDate dateaccessioned) {
+                      LocalDate dateaccessioned) {
         this.caseNo = new SimpleStringProperty(caseNo);
         this.sex = new SimpleStringProperty(sex);
         this.age = new SimpleObjectProperty<Double>(age);
         this.site = new SimpleStringProperty(site);
         this.diagnosis = new SimpleStringProperty(diagnosis);
-        this.slides = new SimpleIntegerProperty(slides);
-        this.blocks = new SimpleIntegerProperty(blocks);
         this.dateaccessioned = new SimpleObjectProperty<>(dateaccessioned);
     }
 
     public String getCaseNo() {
-        if(caseNo == null){
+        if(caseNo == null || caseNo.get() == null){
             return "";
         }
         return caseNo.get();
@@ -116,7 +103,7 @@ public class TableEntry {
     }
 
     public String getSex() {
-        if(sex == null){
+        if(sex == null  || sex.get() == null){
             return "";
         }
         return sex.get();
@@ -131,13 +118,13 @@ public class TableEntry {
     }
 
     public String getAgeString() {
-        if(age.getValue() == null){
+        if(age.getValue() == null  || age.get() == null){
             return "";
         }
         return Double.toString(age.get());
     }
 
-    public double getAge() {
+    public Double getAge() {
         return age.get();
     }
 
@@ -145,12 +132,12 @@ public class TableEntry {
         return age;
     }
 
-    public void setAge(double age) {
+    public void setAge(Double age) {
         this.age.set(age);
     }
 
     public String getSite() {
-        if(site == null){
+        if(site == null  || site.get() == null){
             return "";
         }
         return site.get();
@@ -165,7 +152,7 @@ public class TableEntry {
     }
 
     public String getDiagnosis() {
-        if(diagnosis == null){
+        if(diagnosis == null  || diagnosis.get() == null){
             return "";
         }
         return diagnosis.get();
@@ -179,46 +166,8 @@ public class TableEntry {
         this.diagnosis.set(diagnosis);
     }
 
-    public String getSlidesString() {
-        if(slides.getValue() == null){
-            return "";
-        }
-        return Integer.toString(slides.get());
-    }
-
-    public int getSlides() {
-        return slides.get();
-    }
-
-    public IntegerProperty slidesProperty() {
-        return slides;
-    }
-
-    public void setSlides(int slides) {
-        this.slides.set(slides);
-    }
-
-    public String getBlocksString() {
-        if(blocks.getValue() == null){
-            return "";
-        }
-        return Integer.toString(blocks.get());
-    }
-
-    public int getBlocks() {
-        return blocks.get();
-    }
-
-    public IntegerProperty blocksProperty() {
-        return blocks;
-    }
-
-    public void setBlocks(int blocks) {
-        this.blocks.set(blocks);
-    }
-
     public String getDateaccessionedString() {
-        if(dateaccessioned == null){
+        if(dateaccessioned == null  || dateaccessioned.get() == null){
             return "";
         }
         return dateaccessioned.get().toString();
@@ -249,7 +198,7 @@ public class TableEntry {
     }
 
     public String getOsu() {
-        if(osu == null){
+        if(osu == null  || osu.get() == null){
             return "";
         }
         return osu.get();
@@ -263,20 +212,8 @@ public class TableEntry {
         this.osu.set(osu);
     }
 
-    public String getOrgansystem() {
-        return organsystem.get();
-    }
-
-    public StringProperty organsystemProperty() {
-        return organsystem;
-    }
-
-    public void setOrgansystem(String organsystem) {
-        this.organsystem.set(organsystem);
-    }
-
     public String getDiseaseprocess() {
-        if(diseaseprocess == null){
+        if(diseaseprocess == null  || diseaseprocess.get() == null){
             return "";
         }
         return diseaseprocess.get();
@@ -291,7 +228,7 @@ public class TableEntry {
     }
 
     public String getOtherbiopsies() {
-        if(otherbiopsies == null){
+        if(otherbiopsies == null  || otherbiopsies.get() == null){
             return "";
         }
         return otherbiopsies.get();
@@ -305,56 +242,8 @@ public class TableEntry {
         this.otherbiopsies.set(otherbiopsies);
     }
 
-    public String getIhc() {
-        return ihc.get();
-    }
-
-    public StringProperty ihcProperty() {
-        return ihc;
-    }
-
-    public void setIhc(String ihc) {
-        this.ihc.set(ihc);
-    }
-
-    public int getUnstainedsections() {
-        return unstainedsections.get();
-    }
-
-    public IntegerProperty unstainedsectionsProperty() {
-        return unstainedsections;
-    }
-
-    public void setUnstainedsections(int unstainedsections) {
-        this.unstainedsections.set(unstainedsections);
-    }
-
-    public boolean isEm() {
-        return em.get();
-    }
-
-    public BooleanProperty emProperty() {
-        return em;
-    }
-
-    public void setEm(boolean em) {
-        this.em.set(em);
-    }
-
-    public boolean isWt() {
-        return wt.get();
-    }
-
-    public BooleanProperty wtProperty() {
-        return wt;
-    }
-
-    public void setWt(boolean wt) {
-        this.wt.set(wt);
-    }
-
     public String getSpecialfeatures() {
-        if(specialfeatures == null){
+        if(specialfeatures == null  || specialfeatures.get() == null){
             return "";
         }
         return specialfeatures.get();
@@ -369,7 +258,7 @@ public class TableEntry {
     }
 
     public String getPaxit() {
-        if(paxit == null){
+        if(paxit == null  || paxit.get() == null){
             return "";
         }
         return paxit.get();
@@ -444,7 +333,7 @@ public class TableEntry {
     }
 
     public String getClinicalinformation() {
-        if(clinicalinformation == null){
+        if(clinicalinformation == null  || clinicalinformation.get() == null){
             return "";
         }
         return clinicalinformation.get();
@@ -459,7 +348,7 @@ public class TableEntry {
     }
 
     public String getFollowup() {
-        if(followup == null){
+        if(followup == null  || followup.get() == null){
             return "";
         }
         return followup.get();
@@ -473,20 +362,8 @@ public class TableEntry {
         this.followup.set(followup);
     }
 
-    public String getReferences() {
-        return references.get();
-    }
-
-    public StringProperty referencesProperty() {
-        return references;
-    }
-
-    public void setReferences(String references) {
-        this.references.set(references);
-    }
-
     public String getPatientname() {
-        if(patientname == null){
+        if(patientname == null  || patientname.get() == null){
             return "";
         }
         return patientname.get();
@@ -501,7 +378,7 @@ public class TableEntry {
     }
 
     public String getAddress() {
-        if(address == null){
+        if(address == null  || address.get() == null){
             return "";
         }
         return address.get();
@@ -516,7 +393,7 @@ public class TableEntry {
     }
 
     public String getContact() {
-        if(contact == null){
+        if(contact == null  || contact.get() == null){
             return "";
         }
         return contact.get();
@@ -531,7 +408,7 @@ public class TableEntry {
     }
 
     public String getContactphone() {
-        if(contactphone == null){
+        if(contactphone == null  || contactphone.get() == null){
             return "";
         }
         return contactphone.get();
@@ -546,7 +423,7 @@ public class TableEntry {
     }
 
     public String getContactfax() {
-        if(contactfax == null){
+        if(contactfax == null  || contactfax.get() == null){
             return "";
         }
         return contactfax.get();
@@ -561,7 +438,7 @@ public class TableEntry {
     }
 
     public String getEmail() {
-        if(email == null){
+        if(email == null  || email.get() == null){
             return "";
         }
         return email.get();
@@ -576,7 +453,7 @@ public class TableEntry {
     }
 
     public String getMaterialreceived() {
-        if(materialreceived == null){
+        if(materialreceived == null  || materialreceived.get() == null){
             return "";
         }
         return materialreceived.get();
@@ -591,7 +468,7 @@ public class TableEntry {
     }
 
     public String getMaterialkept() {
-        if(materialkept == null){
+        if(materialkept == null  || materialkept.get() == null){
             return "";
         }
         return materialkept.get();

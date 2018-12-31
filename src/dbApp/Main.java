@@ -24,17 +24,6 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("SusterDB");
 
-        DBUnit dbUnit = new DBUnit();
-
-        try {
-            dbUnit.connect();
-            dbUnit.init();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         initRootLayout();
         showLayout("view/Search.fxml");
     }

@@ -115,10 +115,6 @@
                         <Text layoutX="603.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Age:" />
                         <TextField fx:id="ageText" layoutX="635.0" layoutY="43.0" prefHeight="25.0" prefWidth="40.0" />
                         <ChoiceBox fx:id="sexSelect" layoutX="635.0" layoutY="9.0" prefHeight="25.0" prefWidth="24.0" />
-                        <Text layoutX="718.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blocks: " />
-                        <TextField fx:id="blocksText" layoutX="764.0" layoutY="9.0" prefHeight="25.0" prefWidth="40.0" />
-                        <Text layoutX="718.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Slides:" />
-                        <TextField fx:id="slidesText" layoutX="764.0" layoutY="43.0" prefHeight="25.0" prefWidth="40.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
@@ -183,7 +179,6 @@
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
                <buttons>
                   <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-                  <Button fx:id="deleteBtn" mnemonicParsing="false" text="Delete" />
                   <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#handleSave" text="Save" />
                </buttons>
                <VBox.margin>
