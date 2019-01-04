@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SearchController {
 
@@ -172,7 +173,7 @@ public class SearchController {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     TableEntry rowData = row.getItem();
-                    Main.showForm(rowData);
+                    editEntry();
                 }
             });
             return row ;
@@ -259,7 +260,7 @@ public class SearchController {
             System.out.println(dbTable.getItems().size());
 
         } catch (SQLException e) {
-            e.printStackTrace(); // todo: add alert that the connection failed.
+            e.printStackTrace();
         }
 
     }
@@ -271,23 +272,43 @@ public class SearchController {
 
     @FXML
     private void handleEdit(ActionEvent event) {
+        editEntry();
+    }
+
+    public void editEntry(){
+        if(this.selectedTE == null)
+            return;
         Main.showForm(this.selectedTE);
     }
 
     @FXML
-    private void handleDelete(ActionEvent event) { // todo: add alert
+    private void handleDelete(ActionEvent event) {
+        deleteEntry();
+    }
+
+    public void deleteEntry(){
         if(selectedTE == null)
             return;
-        List<DBCol> myList = new ArrayList<>();
-        myList.add(new DBCol<Integer>(selectedTE.getId(), "id"));
-        try {
-            dbUnit.connect();
-            dbUnit.delete(myList, DBUnit.getTablename());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to permanently delete this record?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            List<DBCol> myList = new ArrayList<>();
+            myList.add(new DBCol<Integer>(selectedTE.getId(), "id"));
+            try {
+                dbUnit.connect();
+                dbUnit.delete(myList, DBUnit.getTablename());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            dbTable.getItems().remove(selectedTE);
+        } else {
         }
-        dbTable.getItems().remove(selectedTE);
+
     }
+
 
     /**
      * Fills all text fields to show details about the person.
@@ -300,4 +321,7 @@ public class SearchController {
             this.selectedTE = tableEntry;
     }
 
+    public TableEntry getSelectedTE(){
+        return this.selectedTE;
+    }
 }

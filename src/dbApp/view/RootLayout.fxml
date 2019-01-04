@@ -14,7 +14,6 @@
             <items>
                   <MenuItem fx:id="newFormBtn" mnemonicParsing="false" onAction="#newForm" text="New Form" />
                   <MenuItem fx:id="backUpBtn" mnemonicParsing="false" text="Back-up Database" />
-                  <MenuItem fx:id="printBtn" mnemonicParsing="false" text="Print" />
                   <MenuItem mnemonicParsing="false" onAction="#initDB" text="Init DB" />
                   <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem fx:id="closeBtn" mnemonicParsing="false" text="Close" />
@@ -22,8 +21,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Entry">
             <items>
-                  <MenuItem fx:id="editBtn" mnemonicParsing="false" text="Edit" />
-              <MenuItem fx:id="deleteBtn" mnemonicParsing="false" text="Delete" />
+                  <MenuItem fx:id="editBtn" mnemonicParsing="false" onAction="#editEntry" text="Edit" />
+              <MenuItem fx:id="deleteBtn" mnemonicParsing="false" onAction="#deleteEntry" text="Delete" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

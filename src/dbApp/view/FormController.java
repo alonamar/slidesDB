@@ -1,18 +1,25 @@
 package dbApp.view;
 
+import dbApp.Main;
 import dbApp.database.DBCol;
 import dbApp.database.DBUnit;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.print.*;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class FormController {
 
@@ -170,7 +177,7 @@ public class FormController {
         }
     }
 
-    public void updateEntry() {
+    public void updateEntry() { // todo: add listener instead of general update
         entry.setCaseNo(caseText.getText());
         entry.setOsu(osuText.getText());
         entry.setPatientname(pNameText.getText());
@@ -275,7 +282,40 @@ public class FormController {
      * Called when the user clicks cancel.
      */
     @FXML
-    private void handleCancel() { // todo : add alert
-        dialogStage.close();
+    public boolean handleCancel() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cancel");
+        alert.setHeaderText(null);
+        alert.setContentText("Your changes will not be saved. Are you sure you want to cancel?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            dialogStage.close();
+            return true;
+        } else {
+            return false;
+        }
     }
+
+    @FXML
+    public void handlePrint() { //todo: make it reshape without showing it
+        AnchorPane layout = Main.getFormLayout();
+        Printer printer = Printer.getDefaultPrinter();
+        PageLayout pageLayout = printer.createPageLayout(Paper.NA_LETTER, PageOrientation.LANDSCAPE, Printer.MarginType.DEFAULT);
+        double scaleX =  pageLayout.getPrintableWidth()/layout.getBoundsInParent().getWidth();
+        double scaleY =  pageLayout.getPrintableHeight()/layout.getBoundsInParent().getHeight();
+        layout.getTransforms().add(new Scale(scaleX, scaleY));
+
+        PrinterJob job = PrinterJob.createPrinterJob();
+        job.showPrintDialog(dialogStage.getOwner());
+        if (job != null) {
+            boolean success = job.printPage(pageLayout, layout);
+            if (success) {
+                job.endJob();
+            }
+        }
+        layout.getTransforms().remove(layout.getTransforms().size() -1);
+
+    }
+
+
 }
