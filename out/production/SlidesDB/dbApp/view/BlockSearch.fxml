@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dbApp.view.BlockSearchController">
+   <children>
+      <SplitPane dividerPositions="0.32942097026604067" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+            <ScrollPane fitToHeight="true" fitToWidth="true">
+               <content>
+                <AnchorPane>
+                     <children>
+                        <GridPane layoutX="8.0" prefHeight="553.0" prefWidth="405.0" AnchorPane.bottomAnchor="165.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="151.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="118.0" minHeight="10.0" prefHeight="99.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="114.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <AnchorPane prefHeight="50.0" prefWidth="250.0">
+                                 <children>
+                                    <TextField fx:id="organText" layoutX="101.0" layoutY="25.0" prefHeight="25.0" prefWidth="226.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="101.0" />
+                                    <Label layoutX="14.0" layoutY="17.0" prefHeight="34.0" prefWidth="87.0" text="Organ/System:" AnchorPane.leftAnchor="10.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="50.0" prefWidth="250.0" GridPane.rowIndex="1">
+                                 <children>
+                                    <TextField fx:id="boxNumText" layoutX="68.0" layoutY="22.0" prefHeight="25.0" prefWidth="47.0" AnchorPane.leftAnchor="68.0" />
+                                    <Label layoutX="11.0" layoutY="18.0" prefHeight="34.0" prefWidth="74.0" text="Box No.:" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="18.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="50.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <TextField fx:id="caseNumText" layoutX="97.0" layoutY="21.0" prefHeight="25.0" prefWidth="86.0" />
+                                    <Label layoutX="13.0" layoutY="25.0" text="Case Number:" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="25.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="21.0" text="Orig. Number:" AnchorPane.leftAnchor="10.0" />
+                                    <TextField fx:id="origNumText" layoutX="100.0" layoutY="17.0" prefHeight="25.0" prefWidth="78.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="100.0" />
+                                 </children></AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label layoutX="54.0" layoutY="21.0" text="Other Number:" AnchorPane.leftAnchor="54.0" />
+                                    <TextField fx:id="otherNumText" layoutX="143.0" layoutY="17.0" prefHeight="25.0" prefWidth="96.0" />
+                                 </children></AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" GridPane.rowIndex="3">
+                                 <children>
+                                    <Label layoutY="14.0" text="Diagnosis:" AnchorPane.leftAnchor="10.0" />
+                                    <TextArea fx:id="diagnosisText" layoutX="68.0" layoutY="16.0" prefHeight="119.0" prefWidth="295.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="9.0" prefHeight="34.0" prefWidth="74.0" text="Special&#10;Features:" AnchorPane.leftAnchor="10.0" />
+                                    <TextArea fx:id="specialFeaturesText" layoutX="68.0" layoutY="10.0" prefHeight="115.0" prefWidth="295.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                                 <children>
+                                    <Label layoutX="11.0" layoutY="29.0" prefHeight="17.0" prefWidth="77.0" text="No. of Blocks:" AnchorPane.leftAnchor="11.0" />
+                                    <TextField fx:id="numOfBlocksText" layoutX="88.0" layoutY="25.0" prefHeight="25.0" prefWidth="60.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <children>
+                                    <Label layoutX="28.0" layoutY="29.0" prefHeight="17.0" prefWidth="77.0" text="No. of Slides:" />
+                                    <TextField fx:id="numOfSlidesText" layoutX="104.0" layoutY="25.0" prefHeight="25.0" prefWidth="60.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="52.0" prefWidth="136.0" GridPane.rowIndex="6" />
+                           </children>
+                        </GridPane>
+                        <ButtonBar layoutX="197.0" layoutY="654.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="21.0">
+                           <buttons>
+                              <Button mnemonicParsing="false" onAction="#handleNewForm" text="New Form" />
+                              <Button mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
+                              <Button mnemonicParsing="false" onAction="#handleEdit" text="Edit" />
+                              <Button mnemonicParsing="false" onAction="#handleSearch" text="Search" />
+                           </buttons>
+                        </ButtonBar>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TableView fx:id="dbTable" editable="true" prefHeight="693.0" prefWidth="964.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columns>
+                        <TableColumn fx:id="organCol" minWidth="0.0" prefWidth="120.0" text="Organ/System" />
+                        <TableColumn fx:id="boxNumCol" prefWidth="60.0" text="Box No" />
+                        <TableColumn fx:id="caseNumCol" prefWidth="60.0" text="Case Number" />
+                        <TableColumn fx:id="origNumCol" prefWidth="60.0" text="Orig. Number" />
+                        <TableColumn fx:id="otherNumCol" prefWidth="60.0" text="Other Number" />
+                        <TableColumn fx:id="diagnosisCol" prefWidth="380.0" text="Diagnosis" />
+                        <TableColumn fx:id="specialFeaturesCol" prefWidth="380.0" text="Special Features" />
+                        <TableColumn fx:id="numOfBlocksCol" prefWidth="50.0" text="No. of Blocks" />
+                        <TableColumn fx:id="numOfSlidesCol" prefWidth="50.0" text="No. of Slides" />
+                        <TableColumn fx:id="paperworkCol" prefWidth="150.0" text="Paperwork (Documents)" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

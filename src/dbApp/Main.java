@@ -1,89 +1,56 @@
 package dbApp;
 
-import dbApp.database.DBUnit;
-import dbApp.view.FormController;
-import dbApp.view.RootLayoutController;
-import dbApp.view.SearchController;
-import dbApp.view.TableEntry;
+import dbApp.view.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 public class Main extends Application {
 
     private static Stage primaryStage;
-    private static BorderPane rootLayout;
-    private static SearchController searchController;
-    private static AnchorPane formLayout;
-
-    public static SearchController getSearchController() {
-        return searchController;
-    }
-
-    public static AnchorPane getFormLayout() {
-        return formLayout;
-    }
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("SusterDB");
 
+        // todo: add login screen
         loginScreen();
-        //initRootLayout();
-        //showLayout("view/Search.fxml");
+        //showLayout("view/Home.fxml", "SusterDB");
     }
 
     /**
-     * Initializes the root layout.
+     * Shows the selected view inside the root layout.
+     * @param pane the layout to load
      */
-    public void initRootLayout() {
-        try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
-
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            RootLayoutController controller = loader.getController();
-            controller.setMain(this);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void showLayout(Pane pane, String title) {
+        Scene scene = new Scene(pane);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle(title);
+        primaryStage.show();
     }
 
     /**
      * Shows the selected view inside the root layout.
      * @param layoutName the layout to load
      */
-    public static void showLayout(String layoutName) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource(layoutName));
-            AnchorPane layout = (AnchorPane) loader.load();
-            searchController = loader.getController();
-            rootLayout.setCenter(layout);
-        } catch (IOException e) {
+    public static void showLayout(String layoutName, String title) {
+        try{
+            Pane root = FXMLLoader.load(Main.class.getResource(layoutName));
+            showLayout(root, title);
+        }catch(IOException e){
             e.printStackTrace();
         }
     }
@@ -138,10 +105,10 @@ public class Main extends Application {
 
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
+        // what to do for the given credentials
         result.ifPresent(usernamePassword -> {
             if(usernamePassword.getKey().equals("suster") &&  usernamePassword.getValue().equals("trump")) {
-                initRootLayout();
-                showLayout("view/Search.fxml");
+                showLayout("view/Home.fxml", "susterDB");
             }else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("No Entrance");
@@ -152,35 +119,41 @@ public class Main extends Application {
         });
     }
 
-    public static void showForm(TableEntry entry) {
-        try {
-            // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/Form.fxml"));
-            formLayout = (AnchorPane) loader.load();
+    /**
+     * Returns the file preference, i.e. the file that was last opened.
+     * The preference is read from the OS specific registry. If no such
+     * preference can be found, null is returned.
+     *
+     * @return
+     */
+    public File getFilePath() {
+        Preferences prefs = Preferences.userNodeForPackage(Main.class);
+        String filePath = prefs.get("filePath", null);
+        if (filePath != null) {
+            return new File(filePath);
+        } else {
+            return null;
+        }
+    }
 
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Form");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage); // not sure if needed
-            Scene scene = new Scene(formLayout);
-            dialogStage.setScene(scene);
+    /**
+     * Sets the file path of the currently loaded file. The path is persisted in
+     * the OS specific registry.
+     *
+     * @param file the file or null to remove the path
+     */
+    public void setFilePath(File file) {
+        Preferences prefs = Preferences.userNodeForPackage(Main.class);
+        if (file != null) {
+            prefs.put("filePath", file.getPath());
 
-            FormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setEntry(entry);
+            // Update the stage title.
+            primaryStage.setTitle("preference - " + file.getName());
+        } else {
+            prefs.remove("filePath");
 
-            // Show the dialog and wait until the user closes it
-            dialogStage.show();
-            dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    if(!controller.handleCancel())
-                        we.consume();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Update the stage title.
+            primaryStage.setTitle("preference");
         }
     }
 
@@ -188,14 +161,9 @@ public class Main extends Application {
      * Returns the main stage.
      * @return
      */
-    public Stage getPrimaryStage() {
+    public static Stage getPrimaryStage() {
         return primaryStage;
     }
-
-    public BorderPane getRootLayout(){
-        return rootLayout;
-    }
-
 
     public static void main(String[] args) {
         launch(args);

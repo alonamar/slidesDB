@@ -3,10 +3,10 @@ package dbApp.view;
 import dbApp.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.DirectoryChooser;
+import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,14 +17,31 @@ public class HomeController implements Initializable {
 
     @FXML
     private AnchorPane rootPane;
-    @FXML
-    private Button searchBtn;
-
-    private DirectoryChooser sourceDirectoryChooser = new DirectoryChooser();
 
     @FXML
-    void searchDB(ActionEvent event) {
-        Main.showLayout("view/Search.fxml");
+    void openConsultDB(ActionEvent event) {
+        loadPage("view/ConsultSearch.fxml", "Consult Database");
+    }
+
+    @FXML
+    void openBlockDB(ActionEvent event) {
+        loadPage("view/BlockSearch.fxml", "Block Database");
+    }
+
+    public void loadPage(String name, String title){
+        BorderPane root = null;
+        FXMLLoader toolBarLoader = null;
+        try {
+            toolBarLoader = new FXMLLoader();
+            toolBarLoader.setLocation(Main.class.getResource("view/ToolBar.fxml"));
+            root = toolBarLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ToolBarController toolBarController = toolBarLoader.getController();
+        toolBarController.setStage(root);
+        toolBarController.loadSearch(name);
+        Main.showLayout(root, title);
     }
 
     @Override

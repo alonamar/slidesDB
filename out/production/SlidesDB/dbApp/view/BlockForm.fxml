@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dbApp.view.BlockFormController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutY="7.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Case Details" underline="true">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Text>
+            <GridPane prefHeight="146.0" prefWidth="1284.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="59.0" minHeight="3.0" prefHeight="48.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="27.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Organ/System:" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="30.05078125" />
+                        <TextField fx:id="organText" layoutX="118.0" layoutY="26.0" prefHeight="25.0" prefWidth="220.0" AnchorPane.topAnchor="26.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="boxNumText" layoutX="77.0" layoutY="6.0" prefHeight="25.0" prefWidth="60.0" AnchorPane.topAnchor="10.0" />
+                        <Text layoutX="28.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Box No:" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="14.0" />
+                     </children></AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Text layoutX="-31.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Case Number:" AnchorPane.leftAnchor="-31.0" AnchorPane.topAnchor="12.0" />
+                        <TextField fx:id="caseNumText" layoutX="56.0" layoutY="9.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <children>
+                        <Text layoutX="-24.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Orig. Number:" AnchorPane.topAnchor="13.0" />
+                        <TextField fx:id="origNumText" layoutX="65.0" layoutY="9.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="otherNumText" layoutX="72.0" layoutY="9.0" prefHeight="25.0" prefWidth="100.0" AnchorPane.topAnchor="9.0" />
+                        <Text layoutX="-19.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Other Number:" AnchorPane.topAnchor="13.05078125" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </GridPane>
+            <Separator prefHeight="0.0" prefWidth="800.0" />
+            <GridPane prefHeight="185.0" prefWidth="800.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="633.0" minWidth="10.0" prefWidth="422.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="93.0" minHeight="3.0" prefHeight="93.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <AnchorPane prefHeight="86.0" prefWidth="745.0">
+                     <children>
+                        <Text layoutX="58.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Diagnosis:" AnchorPane.topAnchor="29.05078125" />
+                        <TextArea fx:id="diagnosisText" layoutX="139.0" layoutY="22.0" prefHeight="65.0" prefWidth="480.0" AnchorPane.leftAnchor="139.0" AnchorPane.topAnchor="22.0" />
+                     </children></AnchorPane>
+                  <AnchorPane prefHeight="55.0" prefWidth="419.0" GridPane.rowIndex="1">
+                     <children>
+                        <Text layoutX="31.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Special Features:" AnchorPane.topAnchor="24.0" />
+                        <TextArea fx:id="specialFeaturesText" layoutX="139.0" layoutY="17.0" prefHeight="65.0" prefWidth="480.0" AnchorPane.leftAnchor="139.0" AnchorPane.topAnchor="17.0" />
+                     </children></AnchorPane>
+               </children>
+            </GridPane>
+            <Separator prefWidth="800.0" />
+            <GridPane prefHeight="139.0" prefWidth="800.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="123.0" minHeight="10.0" prefHeight="123.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <AnchorPane prefHeight="55.0" prefWidth="419.0">
+                     <children>
+                        <Text layoutX="55.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No. of Blocks:" AnchorPane.topAnchor="32.0" />
+                        <TextField fx:id="numOfBlocksText" layoutX="140.0" layoutY="28.0" prefHeight="25.0" prefWidth="60.0" AnchorPane.topAnchor="28.0" />
+                        <Text layoutX="296.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No. of Slides:" AnchorPane.topAnchor="32.0" />
+                        <TextField fx:id="numOfSlidesText" layoutX="378.0" layoutY="28.0" prefHeight="25.0" prefWidth="60.0" AnchorPane.topAnchor="28.0" />
+                     </children></AnchorPane>
+                  <AnchorPane prefHeight="16.0" prefWidth="1280.0" GridPane.rowIndex="1">
+                     <children>
+                        <Text layoutX="64.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paperwork:" AnchorPane.topAnchor="3.0" />
+                        <Hyperlink layoutX="130.0" layoutY="-1.0" onAction="#handleLink" text="Choose Directory" />
+                        <Hyperlink fx:id="paperworkText" layoutX="236.0" layoutY="-1.0" onAction="#handlePaperwork" text="(No directory has been chosen)" />
+                     </children></AnchorPane>
+               </children>
+            </GridPane>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+               <buttons>
+                  <Button mnemonicParsing="false" onAction="#handlePrint" text="Print" />
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+                  <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+               </buttons>
+               <VBox.margin>
+                  <Insets bottom="20.0" right="100.0" />
+               </VBox.margin>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

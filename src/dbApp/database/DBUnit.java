@@ -1,5 +1,7 @@
 package dbApp.database;
 
+import org.h2.tools.Script;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,7 +24,7 @@ public class DBUnit {
      * @param args no need
      */
     public static void main(String[] args){
-        DBUnit myDB = new DBUnit(true);
+        DBUnit myDB = new DBUnit("patient",true);
         try {
             myDB.connect();
             myDB.init();
@@ -34,11 +36,11 @@ public class DBUnit {
             List<DBCol> pkList = new ArrayList<>();
             pkList.add(new DBCol<Boolean>(false, "OLD_FORM"));
             pkList.add(new DBCol<Integer>(79, "id"));
-            myDB.update(pkList, myList, TABLENAME);
+            myDB.update(pkList, myList);
 
-            myDB.delete(pkList, TABLENAME);
-            myDB.insert(myList, TABLENAME);
-            ResultSet mySet = myDB.select(myList, TABLENAME);
+            myDB.delete(pkList);
+            myDB.insert(myList);
+            ResultSet mySet = myDB.select(myList);
             while(mySet.next()){
                 System.out.println(mySet.getString("dateaccessioned"));
             }
@@ -48,7 +50,7 @@ public class DBUnit {
             myList.add(new DBCol<String>("sa", "site"));
             myList.add(new DBCol<Double>(55.0, "age", 50.0));
             myList.add(new DBCol<Integer>(10, "blocks", 0));
-            mySet = myDB.select(myList, TABLENAME);
+            mySet = myDB.select(myList);
             while(mySet.next()){
                 System.out.println(mySet.getString("site"));
             }
@@ -62,13 +64,19 @@ public class DBUnit {
     private boolean verbose = false;
     private Connection con = null;
     private final static String DBNAME = "susterDB";
-    private final static String TABLENAME = "Patient";
+    private String tableName;
 
     public DBUnit(){
         super();
     }
 
-    public DBUnit(boolean verbose){
+    public DBUnit(String tableName){
+        super();
+        this.tableName = tableName;
+    }
+
+    public DBUnit(String tableName, boolean verbose){
+        this.tableName = tableName;
         this.verbose = verbose;
     }
 
@@ -129,13 +137,12 @@ public class DBUnit {
     /**
      *
      * @param whereQ List of DBCol. The WHERE condition, if empty, pick all of them
-     * @param table The table to update
      * @return A table of data representing a dbApp.database result set
      * @throws SQLException in case the select failed for some reason
      */
-    public ResultSet select(List<DBCol> whereQ, String table) throws SQLException {
+    public ResultSet select(List<DBCol> whereQ) throws SQLException {
         Statement mySTMT = this.con.createStatement();
-        String queryString = "SELECT * FROM " + table;
+        String queryString = "SELECT * FROM " + tableName;
         queryString += concatDBList(whereQ, "where");
         if(this.verbose)
             System.out.println(queryString);
@@ -148,12 +155,11 @@ public class DBUnit {
     /**
      *
      * @param insertQ List of DBCol, pairs of key and value
-     * @param table The table to update
      * @throws SQLException in case the insert failed for some reason
      */
-    public void insert(List<DBCol> insertQ, String table) throws SQLException {
+    public void insert(List<DBCol> insertQ) throws SQLException {
         Statement mySTMT = this.con.createStatement();
-        String queryString = "INSERT INTO " + table;
+        String queryString = "INSERT INTO " + tableName;
         queryString += concatDBList(insertQ, "insert");
         if(this.verbose)
             System.out.println(queryString);
@@ -164,11 +170,10 @@ public class DBUnit {
      * Update entry
      * @param pk List of DBCol. The WHERE condition, if empty, pick all of them
      * @param updateQ List of DBCol. The SET arguments - can't be empty (throw sqlexception)
-     * @param table The table to update
      * @throws SQLException in case the update failed for some reason
      */
-    public void update(List<DBCol> pk, List<DBCol> updateQ, String table) throws SQLException {
-        String queryString = "UPDATE " + table;
+    public void update(List<DBCol> pk, List<DBCol> updateQ) throws SQLException {
+        String queryString = "UPDATE " + tableName;
         queryString += concatDBList(updateQ, "set");
         queryString += concatDBList(pk, "where");
         if(this.verbose)
@@ -180,12 +185,11 @@ public class DBUnit {
     /**
      * Delete entry
      * @param pk List of DBCol. The WHERE condition, if empty, pick all of them
-     * @param table The table to update
      * @throws SQLException in case the delete failed for some reason
      */
-    public void delete(List<DBCol> pk, String table) throws SQLException {
+    public void delete(List<DBCol> pk) throws SQLException {
         Statement mySTMT = this.con.createStatement();
-        String queryString = "DELETE FROM " + table;
+        String queryString = "DELETE FROM " + tableName;
         queryString += concatDBList(pk, "where");
         if(this.verbose)
             System.out.println(queryString);
@@ -238,7 +242,15 @@ public class DBUnit {
         this.verbose = verbose;
     }
 
-    public static String getTablename(){
-        return TABLENAME;
+    public String getTablename(){
+        return tableName;
+    }
+
+    public String setTablename(String tableName){
+        return this.tableName = tableName;
+    }
+
+    public void backUpDB() throws SQLException{
+        Script.process(this.con, "database/tables.sql", "", "");
     }
 }

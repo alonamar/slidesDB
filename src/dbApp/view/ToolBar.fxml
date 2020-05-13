@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dbApp.view.ToolBarController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="newFormBtn" mnemonicParsing="false" onAction="#newForm" text="New Form" />
+                  <MenuItem fx:id="backUpBtn" mnemonicParsing="false" onAction="#backUpDB" text="Back-up Database" />
+                  <MenuItem mnemonicParsing="false" onAction="#initDB" text="Init DB" />
+                  <MenuItem mnemonicParsing="false" onAction="#switchDB" text="Switch Databases" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem fx:id="closeBtn" mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Entry">
+            <items>
+                  <MenuItem fx:id="editBtn" mnemonicParsing="false" onAction="#editEntry" text="Edit" />
+              <MenuItem fx:id="deleteBtn" mnemonicParsing="false" onAction="#deleteEntry" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem fx:id="aboutBtn" mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
